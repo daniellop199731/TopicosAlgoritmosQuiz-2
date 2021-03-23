@@ -27,6 +27,15 @@ def noes(valor):
     noes_valor.__name__ = str(valor) + "!="
     return noes_valor
 
+def numCaracteres(valor):
+    '''Metodo para revisar si la variable string cumple con los caracteres definidos como parametro '''
+    noes_valor = lambda x: len(x) == valor
+    return noes_valor
+
+def seEncuentran(valor1, valor2):
+    noes_valor = lambda x,y: x[valor1] == y[valor2]
+    return noes_valor
+
 def es(valor):
     '''es igual a...'''
     es_valor = lambda x: x == valor
@@ -83,28 +92,14 @@ csp2 = CSP({'A':{1,2,3,4}, 'B':{1,2,3,4}, 'C':{1,2,3,4},
 
 csp2 = CSP(
                 {
-                    '1':{"iterativa","agsyru42q","jalorhv75","jsurdhtsb"},
-                    '2':{"voraz","ajsbr","12345","yehsn"},
-                    '3V':{"anchura","jdhytbf","hnjgytr","nmjhytg"},
-                    '3H':{"aestrella","jn6tynhgf","hajtyeshd","haknryste"},
-                    '4':{"profundidad","jandgspñkus","yancbdjsyet","ajndhsyjkid"},
-                    '5':{"arco","ahnd","uant","udks"},
-                    '6':{"camino","uajsns","yensbs","udnsjd"},
-                    '7':{"nodo","aaaa","bbbb","cccc"}
+                    '1':{"123456789","iterativa","jalrgforhv75","jsurdsb"},
+                    '3h':{"123456789","aestrella","gtyukd","edsvy"},
                 },
 
                 [
-                    Restriccion(('1',), noes(3)),
-                    Restriccion(('C',), noes(2)),
-                    Restriccion(('A', 'B'), ne),
-                    Restriccion(('B', 'C'), ne),
-                    Restriccion(('C', 'D'), lt),
-                    Restriccion(('A', 'D'), eq),
-                    Restriccion(('A', 'E'), gt),
-                    Restriccion(('B', 'E'), gt),
-                    Restriccion(('C', 'E'), gt),
-                    Restriccion(('D', 'E'), gt),
-                    Restriccion(('B', 'D'), ne)
+                    Restriccion(('1',), numCaracteres(9)),
+                    Restriccion(('3h',), numCaracteres(9)),
+                    Restriccion(('1','3h',), seEncuentran(1,3))
                 ]
             )
 
@@ -192,7 +187,7 @@ class Solucionador_consistencia(Visualizable):
                 self.visualizar(3, 'Hay poda de dominio ', 'dominio(', variable, ')=',nuevo_dominio, ' debido a ', restriccion)
                 dominios[variable] = nuevo_dominio
                 agregar_para_revisar = self.nuevo_para_revisar(variable, restriccion) - para_revisar
-                para_revisar |- agregar_para_revisar #unión de conjuntos
+                para_revisar - agregar_para_revisar #unión de conjuntos
                 self.visualizar(3, ' agregando ', agregar_para_revisar if agregar_para_revisar else "nada", ' para revisar')
             self.visualizar(4, "El arco (", variable, ',', restriccion, ") ahora es consistente")
         self.visualizar(2, 'Consistencia de arcos terminada. Dominios reducidos ', dominios)
@@ -267,3 +262,6 @@ def seleccionar(iterable):
     for e in iterable:
         return e
 
+print(Solucionador_consistencia(csp2).una_solucion())
+
+#print(Buscador(Busqueda_CSP(csp4)).buscar_profundidad())
